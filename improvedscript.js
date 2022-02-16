@@ -94,4 +94,4 @@ function showColorasBackground() {
   document.querySelector(".background_color_box").style.backgroundColor =
     getColorValue;
 }
-//getColorInput();
+//getColorInput()
