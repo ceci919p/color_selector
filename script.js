@@ -17,7 +17,7 @@ function getColorInput() {
   let getColorValue = colorInput.value;
   document.querySelector("#hex_color_value").textContent = getColorValue;
   document.querySelector(".background_color_box").style.backgroundColor =
-    getColorValue;
+    getColorValue.value;
   hexToRgb(getColorValue);
 }
 
@@ -32,7 +32,9 @@ function hexToRgb(hex) {
 
   //return it as an object with the right values of rgb
   document.querySelector("#rgb_color_value").textContent = `${r}. ${g}. ${b}`;
+
   let rgbColor = { r, g, b };
+
   console.log(rgbColor);
 
   rgbToHSL(rgbColor);

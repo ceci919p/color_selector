@@ -1,10 +1,34 @@
 "use strict";
 
+const colorInput = document.querySelector("#color_input");
+
+window.addEventListener("load", start);
+
+function start() {
+  console.log("start");
+  colorInput.addEventListener("input", getUserColor);
+}
+
 //Getting a selected color from the user
-function getUserColor() {}
+function getUserColor() {
+  let getColorValue = colorInput.value;
+
+  let hexColorValue = getColorValue;
+  let rgbColorValue = hexToRgb(hexColorValue);
+  let cssColorValue = rgbToCss(rgbColorValue);
+  let hslColorValue = rgbToHSL(rgbColorValue);
+
+  //send the value of the selected color to function showUserColor with relevant parameters
+  showUserColor(hexColorValue, rgbColorValue, cssColorValue, hslColorValue);
+}
 
 //Showing a selected color
-function showUserColor() {}
+function showUserColor(hex, rgb, css, hslV) {
+  showHexColor(hex);
+  showRgbColor(rgb);
+  showCssBox(css);
+  showHslColor(hslV);
+}
 
 //Converting hex to RGB
 function hexToRgb(hex) {
@@ -15,76 +39,57 @@ function hexToRgb(hex) {
   //console.log("rgb", r, g, b); // should be 255, 100, 200
 
   //return it as an object with the right values of rgb
-  return { r, g, b };
-}
+  let rgbObj = { r, g, b };
 
-hexToRgb("#ff64c8");
+  return rgbObj;
+  //return `${r}, ${g}, ${b}`;
+}
 
 //Converting RGB to CSS usable string
-function cssToRgb(colorString) {
-  let redColor = parseInt(
-    colorString.substring(
-      colorString.indexOf("(") + 1,
-      colorString.indexOf(",")
-    )
-  );
-  let greenColor = parseInt(
-    colorString.substring(
-      colorString.indexOf(" ") + 1,
-      colorString.lastIndexOf(",")
-    )
-  );
-  let blueColor = parseInt(
-    colorString.substring(
-      colorString.lastIndexOf(",") + 2,
-      colorString.lastIndexOf(")")
-    )
-  );
+function rgbToCss(rgbObj) {
+  let r = rgbObj.r;
+  let g = rgbObj.g;
+  let b = rgbObj.b;
 
-  let rgbColor = { redColor, greenColor, blueColor };
-  console.log(rgbColor);
+  let rgbObj = { r, g, b };
+  return rgbObj;
 }
-
-cssToRgb("rgb(245, 128, 202)");
 
 //Converting RGB to hex
-function rgbToHex(r, g, b) {
-  let redColor = r.toString(16).slice(-2);
-  let greenColor = g.toString(16).slice(-2);
-  let blueColor = b.toString(16).slice(-2);
+function rgbToHex(rgbObj) {
+  let r = rgbObj.r.toString(16).slice(-2);
+  let g = rgbObj.g.toString(16).slice(-2);
+  let b = rgbObj.b.toString(16).slice(-2);
 
-  let hexColor = { redColor, greenColor, blueColor };
-
-  return `#${redColor}${greenColor}${blueColor}`;
+  return `#${r}${g}${b}`;
 }
 
-rgbToHex(245, 128, 202);
-
 //Converting RGB to HSL
-function rgbToHSL(values) {
-  //   console.log(values);
 
-  let R = values.r;
-  let G = values.g;
-  let B = values.b;
+function rgbToHSL(rgbObj) {
+  // console.log("rgbToHSL");
 
-  R /= 255;
-  G /= 255;
-  B /= 255;
+  let r = rgbObj.r;
+  let g = rgbObj.g;
+  let b = rgbObj.b;
+
+  r /= 255;
+  g /= 255;
+  b /= 255;
 
   let h, s, l;
 
-  const min = Math.min(R, G, B);
-  const max = Math.max(R, G, B);
+  const min = Math.min(r, g, b);
+  const max = Math.max(r, g, b);
 
   if (max === min) {
     h = 0;
-  } else if (max === R) {
-    h = 60 * (0 + (G - B) / (max - min));
-  } else if (max === G) {
-    h = 60 * (2 + (B - R) / (max - min));
-  } else if (max === B) {
-    h = 60 * (4 + (R - G) / (max - min));
+  } else if (max === r) {
+    h = 60 * (0 + (g - b) / (max - min));
+  } else if (max === g) {
+    h = 60 * (2 + (b - r) / (max - min));
+  } else if (max === b) {
+    h = 60 * (4 + (r - g) / (max - min));
   }
 
   if (h < 0) {
@@ -102,18 +107,32 @@ function rgbToHSL(values) {
   s *= 100;
   l *= 100;
 
-  document.querySelector("#hsl_color_value").textContent =
-    h.toFixed(0) + "%. " + s.toFixed(0) + "%. " + l.toFixed(0) + "%";
+  // let hslObj = { h, s, l };
+  let hslObj = { h: Math.floor(h), s: Math.floor(s), l: Math.floor(l) };
+  return hslObj;
+}
+
+//Showing the color as hex
+function showHexColor(hex) {
+  document.querySelector("#hex_color_value").textContent = hex;
+}
+
+//Showing the color as RGB
+function showRgbColor(rgb) {
+  //return it as an object with the right values of rgb
+  document.querySelector("#rgb_color_value").textContent = rgb;
+}
+
+//Showing the color as HSL
+function showHslColor(hslV) {
+  document.querySelector(
+    "#hsl_color_value"
+  ).textContent = `hsl: ${hslV.h}, ${hslV.s}, ${hslV.l}`;
 }
 
 //Showing the color as a colored box in CSS
-function showCssBox() {}
-
-//Showing the color as hex
-function showHexColor() {}
-
-//Showing the color as RGB
-function showRgbColor() {}
-
-//Showing the color as HSL
-function showHslColor() {}
+function showCssBox(css) {
+  document.querySelector(
+    ".background_color_box"
+  ).style.backgroundColor = `css:rgb (${css.r}, ${css.g}, ${css.b})`;
+}

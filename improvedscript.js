@@ -8,6 +8,7 @@ function getColorInput() {
   console.log("start");
   colorInput.addEventListener("input", delegator);
 }
+
 function delegator() {
   convertHexToRgb();
   convertRgbToHSL();
@@ -92,6 +93,6 @@ function showHSL(hslVal) {
 }
 function showColorasBackground() {
   document.querySelector(".background_color_box").style.backgroundColor =
-    getColorValue;
+    getColorValue.value;
 }
 //getColorInput()
